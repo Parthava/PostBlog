@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block head %} 
+<title>New Post</title>
+{% endblock %}
+
+{% block body %}
+<nav class="navbar navbar-dark bg-dark">
+  <a class="navbar-brand" href="/index">Post Blog</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample01" aria-controls="navbarsExample01" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarsExample01">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="/index">Home <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">About</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link disabled" href="#">Contact</a>
+      </li>
+
+
+      {% if current_user.is_authenticated %}
+	      <li class="nav-item dropdown">
+	        <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ current_user.username }}</a>
+	        <div class="dropdown-menu" aria-labelledby="dropdown01">
+	          <a class="dropdown-item" href="/index/profile/{{ current_user.username }}">Profile</a>
+	          <a class="dropdown-item" href="/index/account/{{ current_user.username }}">Your Posts</a>
+	          <a class="dropdown-item" href="/index/newpost">Add New Post</a>
+	          <a class="dropdown-item" href="/logout">Logout</a>
+	        </div>
+	      </li>
+	    </ul>
+	  {% else %}
+	  	<li class="nav-item dropdown">
+	        <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Register/Login</a>
+	        <div class="dropdown-menu" aria-labelledby="dropdown01">
+	          <a class="dropdown-item" href="/reg">Register</a>
+	          <a class="dropdown-item" href="/login">Login</a>
+	        </div>
+	      </li>
+	    </ul>
+	  {% endif %}
+  </div>
+</nav>
+
+<div style="width: 75%; margin: 0px auto;">
+	<p class="h3" style="background: #dbd163; color: white; padding: 4px;">Edit:</p><br/>
+	<form action="/account/edit/{{datas.id}}" method="POST">
+		Title:
+		<input class="form-control" type="text" name="title" id="title" type="text" value="{{datas.title}}"><br/>
+		Author: 
+		<input class="form-control" type="text" name="author" id="author" type="text" value="{{datas.author}}"><br/>
+		Post:
+		<textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="content" id="content">{{datas.content}}</textarea><br/>
+		<input class="btn btn-primary" type="submit" value="Save">
+	</form>
+<hr>
+</div>
+
+{% endblock %}

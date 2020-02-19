@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+
+{% block head %} 
+<title>Profile</title>
+<style type="text/css">
+	body {
+  font-size: calc(10px + 0.5vw);
+}
+</style>
+{% endblock %}
+
+{% block body %}
+<nav class="navbar navbar-dark bg-dark">
+  <a class="navbar-brand" href="/index">Post Blog</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample01" aria-controls="navbarsExample01" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarsExample01">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="/index">Home <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">About</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link disabled" href="#">Contact</a>
+      </li>
+
+
+      {% if current_user.is_authenticated %}
+	      <li class="nav-item dropdown">
+	        <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ current_user.username }}</a>
+	        <div class="dropdown-menu" aria-labelledby="dropdown01">
+	          <a class="dropdown-item" href="/index/profile/{{ current_user.username }}">Profile</a>
+	          <a class="dropdown-item" href="/index/account/{{ current_user.username }}">Your Posts</a>
+	          <a class="dropdown-item" href="/index/newpost">Add New Post</a>
+	          <a class="dropdown-item" href="/logout">Logout</a>
+	        </div>
+	      </li>
+	    </ul>
+	  {% else %}
+	  	<li class="nav-item dropdown">
+	        <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Register/Login</a>
+	        <div class="dropdown-menu" aria-labelledby="dropdown01">
+	          <a class="dropdown-item" href="/reg">Register</a>
+	          <a class="dropdown-item" href="/login">Login</a>
+	        </div>
+	      </li>
+	    </ul>
+	  {% endif %}
+  </div>
+</nav>
+
+<div style="width: 75%; margin: 0px auto;">
+{% for data in datas %}
+	{% if current_user.username == data.username %}
+		<p class="h3" style="background: #dbd163; color: white; padding: 7px;"> Your Profile</p><br/>
+	{% else %}
+		<p class="h3" style="background: #dbd163; color: white; padding: 7px;"> {{ data.username }}'s Profile</p><br/><br/>
+	{% endif %}
+
+	<mark>Username:</mark> {{ data.username }}<br/><br/>
+	<mark>Email:</mark> {{ data.email }}<br/><br/>
+
+	{% if data.bio %}
+		<mark>Bio:</mark> {{ data.bio }}<br/><br/>
+	{% else %}
+		<mark>Bio:</mark> -----<br/><br/>
+	{% endif %}
+
+	{% if data.fburl %}
+		<mark>Facebook URL:</mark> <a href="{{ data.fburl }}">{{ data.fburl }}</a><br/><br/>
+	{% else %}
+		<mark>Facebook URL:</mark> -----<br/><br/>
+	{% endif %}
+
+	{% if current_user.username == data.username %}
+	{% if data.secques %}
+		<mark>Security question - Name of your fav movie:</mark> {{ data.secques }}<br/><br/>
+	{% else %}
+		<mark>Security question - Name of your fav movie:</mark> -----<br/><br/>
+	{% endif %}
+
+	
+	<a class="btn btn-primary" href="/profile/edit/{{data.id}}">Edit Profile</a>
+	{% endif %}
+	<hr>
+{% endfor %}
+</div>
+
+{% endblock %}
